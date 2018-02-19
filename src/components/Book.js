@@ -25,7 +25,15 @@ const Book = ({ book, bookShelves }) => {
 };
 
 Book.propTypes = {
-  book: PropTypes.element.isRequired,
+  book: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    imageLinks: PropTypes.shape({
+      smallThumnail: PropTypes.string,
+      thumbnail: PropTypes.string.isRequired
+    }),
+    title: PropTypes.string.isRequired,
+    authors: PropTypes.array.isRequired
+  }),
   bookShelves: PropTypes.array.isRequired
 };
 
