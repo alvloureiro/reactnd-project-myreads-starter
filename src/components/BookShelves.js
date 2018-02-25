@@ -1,44 +1,45 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 import Book from "./Book";
 
-const BookShelves = ({ bookList }) => {
-  const bookShelves = [
-    {
-      displayName: "Currently Reading",
-      name: "currentlyReading"
-    },
-    {
-      displayName: "Want to Read",
-      name: "wantToRead"
-    },
-    {
-      displayName: "Read",
-      name: "read"
-    }
-  ];
+class BookShelves extends Component {
+  static propTypes = {
+    books: PropTypes.array.isRequired,
+    shelves: PropTypes.array.isRequired,
+    onChangeBookShelf: PropTypes.func.isRequired
+  };
 
-  return (
-    <div className="list-books-content">
-      {bookShelves.map(shelf => (
-        <div key={shelf.name} className="bookshelf">
-          <h2 className="bookshelf-title">{shelf.displayName}</h2>
-          <div className="bookshelf-books">
-            <ol className="books-grid">
-              {bookList
-                .filter(book => book.shelf === shelf.name)
-                .map(book => <Book key={book.id} book={book} bookShelves={bookShelves} />)}
-            </ol>
-          </div>
+  render() {
+    const { books, shelves, onChangeBookShelf } = this.props;
+    return (
+      <div className="list-books">
+        <div className="list-books-title">
+          <h1>MyReads</h1>
         </div>
-      ))}
-    </div>
-  );
-};
 
-BookShelves.propTypes = {
-  bookList: PropTypes.array.isRequired
-};
+        <div className="list-books-content">
+          {shelves.map(shelf => (
+            <div key={shelf.name} className="bookshelf">
+              <h2 className="bookshelf-title">{shelf.displayName}</h2>
+              <div className="bookshelf-books">
+                <ol className="books-grid">
+                  {books
+                    .filter(book => book.shelf === shelf.name)
+                    .map(book => <Book key={book.id} book={book} bookShelves={shelves} />)}
+                </ol>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="open-search">
+          <Link to="/search">Add a book</Link>
+        </div>
+      </div>
+    );
+  }
+}
 
 export default BookShelves;

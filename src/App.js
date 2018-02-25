@@ -3,12 +3,25 @@ import { Route } from "react-router-dom";
 import * as BooksAPI from "./BooksAPI";
 import "./App.css";
 import SearchBar from "./components/SearchBar";
-import Home from "./components/Home";
+import BookShelves from "./components/BookShelves";
 
 class BooksApp extends Component {
   state = {
-    showSearchPage: false,
-    books: []
+    books: [],
+    shelves: [
+      {
+        displayName: "Currently Reading",
+        name: "currentlyReading"
+      },
+      {
+        displayName: "Want to Read",
+        name: "wantToRead"
+      },
+      {
+        displayName: "Read",
+        name: "read"
+      }
+    ]
   };
 
   componentDidMount() {
@@ -18,11 +31,27 @@ class BooksApp extends Component {
     });
   }
 
+  changeBookShelf(book, shelf) {
+    BooksAPI.update(book, shelf).then(book => {
+      this.setState(state => ({ books: state.books.concat(book) }));
+    });
+  }
+
   render() {
     return (
       <div className="app">
-        <Route exact path="/" render={() => <Home books={this.state.books} />} />
-        <Route path="/search" render={({ history }) => <SearchBar />} />
+        <Route
+          exact
+          path="/"
+          render={() => (
+            <BookShelves
+              shelves={this.state.shelves}
+              books={this.state.books}
+              onChangeBookShelf={this.changeBookShelf}
+            />
+          )}
+        />
+        <Route path="/search" render={() => <SearchBar books={this.state.books} />} />
       </div>
     );
   }
