@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import BookShelfChanger from "./BookShelfChanger";
 
-const Book = ({ book, bookShelves }) => {
+const Book = ({ book, bookShelves, onChangeBookShelf }) => {
   return (
     <li key={book.id}>
       <div className="book">
@@ -15,7 +15,11 @@ const Book = ({ book, bookShelves }) => {
               backgroundImage: `url(${book.imageLinks.thumbnail})`
             }}
           />
-          <BookShelfChanger shelves={bookShelves} bookShelf={book.shelf} />
+          <BookShelfChanger
+            shelves={bookShelves}
+            book={book}
+            onBookShelfChange={onChangeBookShelf}
+          />
         </div>
         <div className="book-title">{book.title}</div>
         <div className="book-authors">{book.authors}</div>
@@ -34,7 +38,8 @@ Book.propTypes = {
     title: PropTypes.string.isRequired,
     authors: PropTypes.array.isRequired
   }),
-  bookShelves: PropTypes.array.isRequired
+  bookShelves: PropTypes.array.isRequired,
+  onChangeBookShelf: PropTypes.func.isRequired
 };
 
 export default Book;

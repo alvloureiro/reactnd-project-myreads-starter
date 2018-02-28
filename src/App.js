@@ -31,11 +31,13 @@ class BooksApp extends Component {
     });
   }
 
-  changeBookShelf(book, shelf) {
-    BooksAPI.update(book, shelf).then(book => {
-      this.setState(state => ({ books: state.books.concat(book) }));
+  changeBookShelf = (book, shelf) => {
+    BooksAPI.update(book, shelf).then(result => {
+      BooksAPI.getAll().then(books => {
+        this.setState({ books });
+      });
     });
-  }
+  };
 
   render() {
     return (
@@ -51,7 +53,10 @@ class BooksApp extends Component {
             />
           )}
         />
-        <Route path="/search" render={() => <SearchBar books={this.state.books} />} />
+        <Route
+          path="/search"
+          render={() => <SearchBar books={this.state.books} shelves={this.state.shelves} />}
+        />
       </div>
     );
   }
